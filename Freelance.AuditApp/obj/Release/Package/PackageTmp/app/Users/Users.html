@@ -1,0 +1,53 @@
+﻿<section class="mainbar" data-ng-controller="Users as vm">
+    <section class="matter">
+        <div class="container">
+       
+
+    
+
+                <div class="row">
+                    <div class="col-md-7">
+                        <div class="widget wblue">
+                            <div data-cc-widget-header title="{{vm.title}}"
+                                 allow-collapse="true"></div>
+                            <div class="widget-content text-center text-info">
+                                <table class="table table-condensed table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th style="vertical-align: middle; text-align: center;"><em>User Name</em></th>
+                                            <th style="vertical-align: middle; text-align: center; "><em>Role</em></th>
+                                            <th style="vertical-align: middle; text-align: center;"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr data-ng-repeat="p in vm.users">
+                                            <td style="vertical-align: middle; text-align: center; "><em>{{p.username}}</em></td>
+                                            <td style="vertical-align: middle; text-align: center; "><em>{{p.userRole}}</em></td>
+                                            <td style="vertical-align: middle; text-align: center; ">
+                                                <div  class="btn-group btn-group-x">
+                                                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addToProject{{p.userId}}"><i class="fa fa-plus"></i>Add to project</button>
+                                                    <removeuser userid="p.userId" users="vm.users"></removeuser>
+                                                    <!--<button type="button" class="btn btn-danger">Remove User</button>-->
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="widget-foot">
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- Repeating Modal trigger modal -->
+                <div data-ng-repeat="p in vm.users ">
+                    <!-- Modal -->
+                    <userprojectmodalbyid user="p"></userprojectmodalbyid>
+                </div>
+                <!--End Repeating Modal trigger modal -->
+            </div>
+      
+    </section>
+</section>

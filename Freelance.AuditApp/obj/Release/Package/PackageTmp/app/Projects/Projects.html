@@ -1,0 +1,72 @@
+﻿<section class="mainbar" data-ng-controller="projects as vm">
+    <section class="matter">
+        <div class="container">
+  
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="widget wblue">
+                                <div data-cc-widget-header title="{{vm.title}}"
+                                     allow-collapse="true"></div>
+                                <div class="widget-content text-center text-info">
+                                    <div class="table-responsive">
+                                        <table class="table table-condensed table-striped table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th><em>Project Name</em></th>
+                                                    <th><em>Project Number</em></th>
+                                                    <th><em>Roaster</em></th>
+                                                    <th><em>Location</em></th>
+                                                    <th><em>Duration</em></th>
+                                                    <th><em>Operation</em></th>
+                                                   
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr data-ng-repeat="p in vm.projects">
+                                                    <td><em>{{p.projectName}}</em></td>
+                                                    <td><em>{{p.projectNumber}}</em></td>
+                                                    <td><em>( {{p.rosterWork}} ) {{p.rosterBreak}}</em></td>
+                                                    <td><em>{{p.location}}</em></td>
+                                                    <td><em>{{p.duration}}</em></td>
+                                                    <td>
+                                                        <button type="button" ng-click="vm.go('/Projects/ViewAspect/{{p.projectId}}')" class="btn btn-default">View Aspect</button>
+                                                        
+
+                                                    </td>
+                                                    <td>
+                                                       
+                                                        <button type="button" ng-click="vm.go('/Projects/EditAspect/{{p.projectId}}')" class="btn btn-default">Edit Aspect</button>
+                                                       
+
+                                                    </td>
+                                                    <td>
+                                                       
+                                                        <button type="button" ng-click="vm.go('/Projects/EditProject/{{p.projectId}}')" class="btn btn-default">Edit Project</button>
+                                                        
+
+                                                    </td>
+                                                    <td>
+                                                      
+                                                        <removeproject projectid="p.projectId" projects="vm.projects"></removeproject>
+
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                  
+                                </div>
+                                <div class="widget-foot">
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                
+                    </div>
+                    <div class="widget-foot">
+                        <div class="clearfix"></div>
+                    </div>
+      
+        </div>
+    </section>
+</section>

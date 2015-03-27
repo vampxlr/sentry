@@ -1,0 +1,47 @@
+﻿@model List<Freelance.AuditApp.Action> 
+
+<table>
+    <tr>
+        <th>
+            Action Description
+        </th>
+        <th>
+            Action Priority
+        </th>
+        <th>
+            Due Date
+        </th>
+        <th>
+            Created Date
+        </th>
+        <th>
+            Raised By
+        </th>
+        <th>
+            Closed
+        </th>
+    </tr>
+    @foreach (var act in Model)
+    {
+        <tr>
+            <td>
+                @act.ActionDescription
+            </td>        
+            <td>
+                @act.Priority
+            </td>        
+            <td>
+                @act.DueDate
+            </td>
+            <td>
+                @act.CreatedDate
+            </td>
+            <td>
+                @act.RaisedBy
+            </td>
+            <td>
+                @act.Closed
+            </td>
+        </tr>    
+    }
+</table>

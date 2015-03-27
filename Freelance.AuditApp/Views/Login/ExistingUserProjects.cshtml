@@ -1,0 +1,86 @@
+﻿@model Freelance.AuditApp.Models.UserProjects
+
+<input type="hidden" id="UserId" value="@Model.UserId" />
+<div>
+    <span>
+        <select id="userProjectId">
+            @foreach (var up in Model.Projects)
+            {
+                <option value="@up.ProjectId" data-projectNumber="@up.ProjectNumber">@up.ProjectName</option>
+            }
+        </select>
+    </span>
+    <span>
+        <a href="#" class="addNewProject myButton" style="color:white !important; margin-top: 5px;">Grant user access</a>
+    </span>
+</div>
+
+<div class="datagrid" style="width: 90%; margin-top:10px;">
+    <table id="userProjects">
+        <tr>
+            <th>
+                Project Name
+            </th>
+            <th>
+                Project Number
+            </th>
+            <th>
+                Operation
+            </th>
+        </tr>
+        <tr>
+            @foreach (var p in Model.ExistingUserProjects)
+            {
+                <tr class="@p.ProjectId">
+                <td>@p.ProjectName</td>
+                <td>@p.ProjectNumber</td>
+                    <td>
+                        <a href="#" class="removeUserFromProject delete" data-projectid="@p.ProjectId" style="color:white !important; margin-top: 5px; margin-left:27%;"></a>
+                    </td>
+                    </tr>
+            }
+        </tr>
+    </table>   
+</div>
+
+<script>
+    $(".addNewProject").click(function() {
+        var userId = $("#UserId").val();
+        var projectId = $("#userProjectId option:selected").val();
+        var projectName = $("#userProjectId option:selected").text();
+        var projectNumber = $("#userProjectId option:selected").attr("data-projectNumber");
+        var url = '@Url.Action("AddUserToProject","Login")';
+
+        if (projectName != "") {
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: { userId: userId, projectId: projectId },
+                success: function() {
+                    toastr.success("User has been granted access to this project");
+                    $("#userProjectId option:selected").remove();
+                    $("#userProjects").append("<tr><td>" + projectName + "</td><td>" + projectNumber + "</td><td></td></tr>");
+                }
+            });
+        } else {
+            toastr.error("Cannot grant user permissions to this project!");
+        }
+
+    });
+
+    $(".removeUserFromProject").click(function() {
+        var userId = $("#UserId").val();
+        var projectId = $(this).attr("data-projectid");
+        var url = '@Url.Action("RemoveUserFromProject", "Login")';
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: { userId: userId, projectId: projectId },
+            success: function() {
+                toastr.success("User has been revoked access to this project");
+                $("." + projectId).remove();
+            }
+        });
+    });
+    
+</script>

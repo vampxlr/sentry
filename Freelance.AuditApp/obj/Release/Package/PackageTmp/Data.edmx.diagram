@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="20af46fb4b784f688c556dd0b83791cc" Name="Diagram1" ZoomLevel="64">
+        <EntityTypeShape EntityType="Audit.UserProject" Width="1.5" PointX="6.875" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Audit.User" Width="1.5" PointX="0.75" PointY="1.625" IsExpanded="true" />
+        <AssociationConnector Association="Audit.FK__UserProje__UserI__145C0A3F" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="Audit.AspectItem" Width="1.5" PointX="6.125" PointY="5.125" />
+        <EntityTypeShape EntityType="Audit.ProjectAspect" Width="1.5" PointX="3.75" PointY="3.375" />
+        <AssociationConnector Association="Audit.FK__AspectIte__Proje__22AA2996" />
+        <EntityTypeShape EntityType="Audit.Action" Width="1.5" PointX="9" PointY="0.75" />
+        <EntityTypeShape EntityType="Audit.Result" Width="1.5" PointX="9" PointY="4.625" />
+        <EntityTypeShape EntityType="Audit.Project" Width="1.5" PointX="1.5" PointY="5.125" />
+        <AssociationConnector Association="Audit.FK__ProjectAs__Proje__1920BF5C" />
+        <AssociationConnector Association="Audit.FK__Projects__Create__0EA330E9" />
+        <AssociationConnector Association="Audit.FK__UserProje__Proje__1367E606" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

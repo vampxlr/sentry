@@ -1,0 +1,168 @@
+﻿@using Freelance.AuditApp.Models
+@model Freelance.AuditApp.Models.ProjectModel 
+
+@{
+    ViewBag.Title = "Audits";
+    var loggedIn = Session["Username"];
+}
+<head>
+    <title>Audit View</title>
+    <link href="~/Content/audit.css" rel="stylesheet" />
+    <link href="~/Content/tables.css" rel="stylesheet" />
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <link href="~/Content/button.css" rel="stylesheet" />
+    <link href="~/Content/jquery-ui-1.10.4.custom.css" rel="stylesheet" />
+    <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <link href="~/Content/toastr/toastr.css" rel="stylesheet" />
+    <script src="~/Content/toastr/toastr.js"></script>
+    <link href="~/Content/easydropdown.css" rel="stylesheet" />
+</head>
+<div id="header">
+    <div>Welcome @loggedIn, you are logged into EnviroManager!</div>
+    <div class="logout">Logout</div>
+</div>
+<input type="hidden" id="projectId" />
+<div>
+    <p>
+        Please select the Project you wish to work with:
+    </p>
+    
+    <select class="easydropdown" style="width: 400px" id="projectSelection">
+        <option>
+            Please select a project...
+        </option>
+        @foreach (var project in Model.Projects)
+        {
+            <option number="@project.ProjectNumber" value="@project.ProjectId">@project.ProjectName</option>
+        }
+    </select>
+    <div id="operations" style="margin-top: 15px;">
+        <a href="#" id="newInsepction" class="myButton">New Inspection</a>
+        <a href="#" id="closeActions" class="myButton">Close Actions</a>    
+    </div>
+</div>
+	
+<div id="section1" class="datagrid" style="margin-top: 15px;">
+    <table>
+        <tr>
+            <td>
+                Project
+            </td>
+            <td>
+                <input class="textbox-large" id="project" readonly="readonly" type="text" />
+            </td>
+            <td>
+                Project Number
+            </td>
+            <td>
+                <input class="textbox-large" id="projectNumber" readonly="readonly" type="text" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Date
+            </td>
+            <td>
+                <input class="textbox-large clear" id="date" type="text" />
+            </td>
+            <td>
+                Time
+            </td>
+            <td>
+                <input class="textbox-large clear" id="time" type="text" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Conducted By
+            </td>
+            <td>
+                <input class="textbox-large" id="conductedBy" value="@loggedIn" readonly="readonly" type="text" />
+            </td>
+            <td>
+                Weather Observations
+            </td>
+            <td>
+                <input class="textbox-large clear" id="weather" type="text" />
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+<div id="projectAspects">
+</div>
+
+<div id="closeOutActions"></div>
+
+<script type="text/javascript">
+    $("#date").datepicker({ dateFormat: 'dd/mm/yy' });
+
+    $(document).ready(function() {
+        $("#operations").hide();
+        $("#section1").hide();
+    });
+    
+    $(".logout").click(function () {
+        var url = '@Url.Action("Index", "Login")';
+            window.location = url;
+        });
+
+    $("#projectSelection").change(function() {
+        var val = $("#projectSelection option:selected").text();
+        var id = $("#projectSelection option:selected").val();
+        var projectNumber = $("#projectSelection option:selected").attr("number");
+        $("#projectNumber").val(projectNumber);
+        $("#projectId").val(id);
+        $("#project").val(val);
+        toastr.warning("You have selected " + val);
+        $("#operations").show();
+        var projectId = $("#projectSelection option:selected").val();
+
+        $.ajax({
+            url: '@Url.Action("ProjectAspects", "Login")',
+            data: { projectId: projectId },
+            cache: false,
+                    success: function (data) {
+                        $("#projectAspects").html(data);
+              
+                        $("#projectAspects").hide();
+                        $("#closeOutActions").hide();
+                        $("#section1").hide();
+                    }
+             });
+
+    });
+
+    $("#closeActions").click(function() {
+        var projectId = $("#projectSelection option:selected").val();
+        $.ajax({
+            url: '@Url.Action("CloseActions", "Login")',
+            data: { projectId: projectId },
+            cache: false,
+                    success: function (data) {
+                        $("#closeOutActions").html(data);
+                        $("#closeOutActions").slideDown();
+                        $("#projectAspects").hide();
+                        $("#section1").hide();
+                    }
+                });
+    });
+
+    $("#newInsepction").click(function() {
+        $("#section1").slideDown();
+        var projectId = $("#projectSelection option:selected").val();
+        $("#closeOutActions").hide();
+        $("#projectAspects").slideDown();
+@*        $.ajax({
+            url: '@Url.Action("ProjectAspects", "Login")',
+            data: { projectId: projectId },
+            success: function(data) {
+                $("#projectAspects").html(data);
+            }
+        });*@
+
+        var url ='@Url.Content("ProjectAspects.cshtml")';
+    });
+</script>
+

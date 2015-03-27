@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="span12">
+        <label for="customerList">Customers:</label><select id="customerList" data-bind="options: customers, optionsText: 'LastName', value: currentCustomer"></select>
+        <form action="#" method="post">
+            <fieldset data-bind="with: currentCustomer">
+                <legend>Current customer info:</legend>
+                <label for="customerName">Name:</label>
+                <input id="customerName" data-bind="value: LastName" />
+                <label for="customerPhone">Phone:</label>
+                <input id="customerPhone" data-bind="value: Phone" />
+                <button id="saveButton" data-bind="click: $parent.saveChanges">Save changes</button>
+            </fieldset>
+        </form>
+    </div>
+
+    <script src="~/Scripts/jquery-2.0.3.js"></script>
+    <script src="~/Scripts/knockout-2.3.0.debug.js"></script>
+    <script src="~/Scripts/q.js"></script>
+    <script src="~/Scripts/breeze.debug.js"></script>
+    <script type="text/javascript">
+        var my = my || {}; // root namespace for my stuff
+        $(function () {
+
+            my.em = new breeze.EntityManager("http://localhost:52772/breeze/Breeze");
+
+            my.vm = function () {
+                var customers = [],
+                    currentCustomer = [],
+                    load = function () {
+                        var query = breeze.EntityQuery.from("Users").expand('projects,userprojects');
+                        return my.em.executeQuery(query)
+                                .then(querySucceeded)
+                                .fail(queryFailed);
+                        function querySucceeded(data) {
+                            console.log(data.results);
+                            my.vm.customers(data.results);
+                        };
+                        function queryFailed(error) {
+                            alert("Query failed: " + error.message);
+                        };
+                    },
+                    saveChanges = function () {
+                        my.em.saveChanges().fail(function (error) { alert("Failed save to server: " + error.message); });
+                    };
+                return {
+                    customers: customers,
+                    currentCustomer: currentCustomer,
+                    load: load,
+                    saveChanges: saveChanges
+                };
+            }();
+            my.vm.load();
+            
+        });
+    </script>
+</body>
+</html>

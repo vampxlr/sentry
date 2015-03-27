@@ -1,0 +1,100 @@
+﻿<section class="mainbar" data-ng-controller="CloseAction as vm">
+    <section class="matter">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="widget wblue">
+                    <div data-cc-widget-header title="Project Details"></div>
+                    <div class="widget-content ">
+                        <div class="col-md-12" style="padding-bottom:15px">
+
+
+                            <input style="width:100%" ng-model="vm.search" placeholder="Search term" class="form-control" type="text" value="">
+
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tr>
+                                    <th><em>Action Description</em></th>
+                                    <th><em>Action Priority</em></th>
+                                    <th><em>Due Date</em></th>
+                                    <th><em>Created Date</em></th>
+                                    <th><em>Created By</em></th>
+                                    <th><em>Close Action</em></th>
+                                </tr>
+
+                                <tr ng-repeat="Actions in vm.Actions | filter:vm.search">
+                                    <td><em>{{Actions.ActionDescription}}</em></td>
+                                    <td><em>{{Actions.Priority}}</em></td>
+                                    <td><em>{{Actions.DueDate}}</em></td>
+                                    <td><em>{{Actions.CreatedDate}}</em></td>
+                                    <td><em>{{Actions.RaisedBy}}</em></td>
+                                    <td><button data-toggle="modal" data-target="#actionModal{{Actions.ActionId}}" class="btn btn-info">Close Action</button></td>
+                                </tr>
+
+
+                            </table>
+                        </div>
+                    </div>
+                    <div class="widget-foot">
+
+
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+
+            </div> <!--end of col md 6-->
+
+        </div>
+
+
+        <!-- Modal -->
+        <div ng-repeat="Actions in vm.Actions" class="modal fade" id="actionModal{{Actions.ActionId}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">Close Action</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-4">
+                                    <em>Comments</em>
+                                </div>
+                                <div class="col-md-8">
+                                    <textarea rows="3" ng-model="vm.description" placeholder="Write your comments here...." class="form-control" style="width:100%;"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding-top:20px" class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-4">
+                                    <em>Date Completed</em>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" ng-model="vm.dateClosed" placeholder="Enter completion date [dd/mm/yyy]" class="form-control" style="width:100%;" value="" ui-date />
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding-top:20px" class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-4">
+                                    <em>Notify Person through Email</em>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" ng-model="vm.EmailTo" class="form-control" style="width:100%;" placeholder="Enter Email Address" />
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button data-dismiss="modal" ng-click="vm.closeUserAction(Actions.ActionId)" type="button" class="btn btn-primary">Close Action</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>

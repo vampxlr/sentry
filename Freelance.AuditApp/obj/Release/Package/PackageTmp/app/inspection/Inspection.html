@@ -1,0 +1,30 @@
+﻿<section class="mainbar" data-ng-controller="inspection as vm">
+    <section class="matter">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="widget wblue">
+                    <div data-cc-widget-header title="Inspection"></div>
+                    <div class="widget-content ">
+                       
+                       
+                        
+                        <select class="form-control" ng-model="vm.SelectedProject" ng-options="project.ProjectName for project in vm.projects">
+                            <option value="">Select a project</option>
+                        </select>
+                        {{vm.SelectedProjectId}}
+                        <button ng-click="vm.go('/inspection/inspecting/')" class="btn btn-default">Inspection</button>
+                        <button ng-click="vm.go('/inspection/closeaction/')" class="btn btn-primary">Close Action</button>
+
+                    </div>
+                    <div class="widget-foot">
+
+
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+
+            </div> <!--end of col md 6-->
+
+        </div>
+    </section>
+</section>

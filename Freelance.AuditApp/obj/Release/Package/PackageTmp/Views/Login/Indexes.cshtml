@@ -1,0 +1,41 @@
+﻿@{
+    ViewBag.Title = "Indexes";
+}
+
+<h2>Indexes</h2>
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<input id="login" class="button-margin" type="submit" value="Log in" />
+
+
+
+
+
+
+
+
+
+
+
+<script>
+    var loginUrl = '@Url.Action("som")';
+
+    function bindLogin() {
+        $('#login').click(function () {
+           
+
+                $.ajax({
+                    url: loginUrl,
+                    type: "POST",
+                    data: { x:'something' },
+                    success: function (data) {
+                        alert(JSON.stringify(data));
+                    }
+                });
+            
+        });
+    }
+
+    $(document).ready(function() {
+        bindLogin();
+    });
+</script>

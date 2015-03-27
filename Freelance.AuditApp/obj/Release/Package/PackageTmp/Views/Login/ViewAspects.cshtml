@@ -1,0 +1,61 @@
+﻿@model Freelance.AuditApp.Project
+
+<center>
+    <div class="datagrid" style="margin-top: 15px; width:80%; text-align:center">
+        <table style="width:100%">
+            @foreach (var sect in Model.ProjectAspects)
+            {
+                <tr class="@sect.ProjectAspectsID">
+                    <td style="background-color: lightgray">
+                        <b>@sect.Aspect</b>
+                    </td>
+                    <td style="width:40px; text-align:center">
+                        <img class="deleteAspect delete" id="@sect.ProjectAspectsID" class="delete"/>
+                    </td>
+                </tr>
+                foreach (var question in sect.AspectItems)
+                {
+                    <tr id="aspect_(@question.AspectItemsID)" class="@question.AspectItemsID @sect.ProjectAspectsID">
+                        <td>
+                            @question.AspectItem1
+                        </td>
+                        <td style="width:40px; text-align:center">
+                            <img class="deleteItem delete" id="@question.AspectItemsID" class="delete"/>
+                        </td>
+                    </tr>
+                }
+            }
+
+        </table>
+    </div>
+</center>
+
+<script>
+    $(".deleteAspect").click(function() {
+        var id = this.id;
+        var url = '@Url.Action("DeleteProjectAspect")';
+        $.ajax({            
+            url: url,
+            type:"POST",
+            data: { projectAspectId: id }
+            , success: function () {
+                toastr.success("Project aspect has been deleted from the system");
+                $("." + id).fadeOut();
+            }
+        });
+    });
+    
+    $(".deleteItem").click(function () {
+        var id = this.id;
+        var url = '@Url.Action("DeleteProjectAspectItem")';
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: { projectAspectItemId: id }
+            , success: function () {
+                toastr.success("Project item has been deleted from the system");
+                $("." + id).fadeOut();
+            }
+        });
+        });
+</script>

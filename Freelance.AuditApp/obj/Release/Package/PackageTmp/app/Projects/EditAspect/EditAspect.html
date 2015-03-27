@@ -1,0 +1,81 @@
+﻿<section class="mainbar" data-ng-controller="EditAspect as vm">
+    <section class="matter">
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="widget wlightblue">
+                    <div data-cc-widget-header title="{{vm.title}}"></div>
+                    <div class="widget-content ">
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group">
+
+                                <div class="col-sm-12">
+                                    <div class="col-xs-4">
+
+                                        <input type="text" style="width:100%;" class="form-control" id="Aspect" value="{{vm.Project.ProjectName}}" placeholder="Project Name" disabled>
+                                    </div>
+                                    <div class="col-xs-4">
+
+                                        <input type="text" ng-model="vm.AspectName" style="width:100%;" class="form-control" id="Aspect" placeholder="Aspect Name">
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <button ng-click="vm.AddNewAspect()" type="button" class="btn btn-default">Add New Aspect</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+
+                                <div class="col-sm-12">
+
+                                    <div class="col-xs-4">
+
+                                        <select style="width:100%;" class="form-control" ng-model="vm.selectedOptionAspects" ng-options="aspect.AspectName for aspect in vm.Aspect">
+                                            <option value="">Select an aspect</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <input type="text" ng-model="vm.NewAspectItem" class="form-control" style="width:100%;" id="AspectItem" placeholder="Aspect Item Name">
+
+                                    </div>
+                                    <div class="col-xs-2">
+                                        <button type="button" ng-click="vm.AddNewAspectItem()" class="btn btn-default">Add Aspect Item</button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </form>
+                        <div class="row">
+                            <div class="listOfAspect col-md-6">
+                                <div>
+                                    <ul>
+                                        <li ng-repeat="aspect in vm.Aspect"> {{aspect.AspectName}} <a href="">[remove]</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="listOfAspectItem col-md-6">
+                                <div>
+                                    <ul>
+                                        <li ng-repeat="aspectItem in vm.selectedOptionAspects.AspectItems"> {{aspectItem.AspectItem}} <a href="">[remove]</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                       
+                    </div>
+                    <div class="widget-foot">
+
+                        <div class=" row">
+
+                        </div>
+
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <button ng-click="vm.go('/Projects')" class="btn btn-info"> <i class="fa fa-long-arrow-left"></i> Back To Projects</button>
+            </div> <!--end of col md 6-->
+
+        </div>
+    </section>
+</section>

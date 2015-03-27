@@ -1,0 +1,97 @@
+﻿@model Freelance.AuditApp.Project
+
+@{
+    ViewBag.Title = "EditAspects";
+}
+
+<p style="background-color: steelblue; width: 50%;margin-top:10px; margin-left:25%; text-align: center; color:white; border: 1px solid black;">
+    You are adding new Aspects/Items for Project: @Model.ProjectName (@Model.ProjectNumber)
+</p>
+
+<input type="hidden" id="theProjectId" value="@Model.ProjectId" />
+<div class="datagrid" style="width:50%; margin-left:25%; text-align: center;">
+    <table>
+        <tr>
+            <td>Aspect</td>
+            <td colspan="2">
+                <input type="text" id="aspectText" class="textbox-large" style="width:100% !important" />    
+            </td>
+            <td>
+                <a href="#" id="addNewAspect" style="color:white !important; margin-top: 5px;" class="myButton">Add Aspect</a>
+            </td>
+        </tr>
+         <tr>
+        <td>Aspect Item</td>
+        <td>
+         @if (!Model.ProjectAspects.Any())
+        {
+            <p>No aspects have been entered for this project, please add an Aspect first before adding an item</p>
+        }
+        else
+        {
+            <select id="aspectItems">
+                @foreach (var act in Model.ProjectAspects)
+                {
+                    <option value="@act.ProjectAspectsID">@act.Aspect</option>
+                }
+            </select> 
+        }
+        </td>
+        <td>
+            <input type="text" id="itemText" class="textbox-large" style="width:100% !important" />    
+        </td>
+        <td>
+            <a href="#" id="addNewItem" style="color:white !important; margin-top: 5px;" class="myButton">Add Aspect Item</a>
+        </td>
+    </tr>
+    </table>
+</div>
+
+
+<script>
+    $(document).ready(function() {
+       // $("#newAspect").hide();
+       // $("#newItem").hide();
+    });
+    
+    $("#addNewAspect").click(function () {
+        var projectId = $("#theProjectId").val();
+        var text = $("#aspectText").val();
+        var url = '@Url.Action("AddNewProjectAspect")';
+        if (text == "") {
+            toastr.error('This field cannot be left empty!');
+        } else {
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: { projectId: projectId, aspect: text },
+                success: function (data) {
+                    toastr.success('Project aspect successfully created!');
+                    $("#aspectItems").append("<option value=" + data.id + ">" + text + "</option");
+                }
+            });
+        }
+
+    });
+
+    $("#addNewItem").click(function () {
+        var projectId = $("#theProjectId").val();
+        var aspectId = $("#aspectItems option:selected").val();
+        var text = $("#itemText").val();
+        var url = '@Url.Action("AddNewProjectAspectItem")';
+
+        if (text == "") {
+           toastr.error('This field cannot be left empty!');
+        } else {
+
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: { projectId: projectId, projectAspectId: aspectId, aspect: text },
+            success: function () {
+                toastr.success('Project aspect successfully created!');
+            }
+        });
+       }
+    });
+</script>

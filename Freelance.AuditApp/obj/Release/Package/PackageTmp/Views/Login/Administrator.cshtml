@@ -1,0 +1,440 @@
+﻿@using Freelance.AuditApp
+@model Freelance.AuditApp.Models.ProjectModel
+@{
+    ViewBag.Title = "Index";
+    var loggedIn = Session["Username"];
+}
+<head>
+    <title>Administrator View</title>
+    <link href="~/Content/audit.css" rel="stylesheet" />
+    <link href="~/Content/tables.css" rel="stylesheet" />
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <link href="~/Content/button.css" rel="stylesheet" />
+    <link href="~/Content/jquery-ui-1.10.4.custom.css" rel="stylesheet" />
+    <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <link href="~/Content/toastr/toastr.css" rel="stylesheet" />
+    <script src="~/Content/toastr/toastr.js"></script>
+</head>
+<body>
+   
+<div id="header">
+    <div>Welcome @loggedIn, you are logged into EnviroManager!</div>
+    <div class="logout">Logout</div>
+</div>
+    <div style="text-align:center">
+    <div style="margin-top:5px;">
+    <div style="float:left; margin-left: 27%; margin-bottom: 10px;">
+        <a href="#" id="showUsers" class="myButton">Show Users</a>
+        <a href="#" id="showProjects" class="myButton">Show projects</a>
+        <a href="#" id="addProject" class="myButton">Add a new Project</a>
+        <a href="#" id="addUser" class="myButton">Add a new User</a>
+    </div>
+    </div>
+        </div>
+<div id="administrator-options">   
+    <div id="users" class="datagrid" style="margin-top:10px; margin-left:10%; width:80% !important">
+         <table>
+            <thead>
+                <tr>
+                    <th>
+                        Username
+                    </th>      
+                    <th>
+                        Role
+                    </th>  
+                    <th style="width:170px;">
+                        Operations
+                    </th>
+                </tr>
+            </thead>
+            @foreach (var user in Model.Users)
+            {
+                <tr id="user_@user.UserId">
+                    <td>
+                        @user.Username
+                    </td>
+                    <td>
+                        @user.UserRole
+                    </td>
+                    <td style="width:300px">
+                        <a href="#" class="addToProject myButton" data-userid="@user.UserId">Add to project</a>
+                         <a href="#" class="removeUser deleteButton" data-userid="@user.UserId">Remove user</a>
+                    </td>
+                </tr>
+ 
+            }
+        </table>
+    </div>    
+    <div id="projects" class="datagrid" style="margin-top:10px; margin-left:10%; text-align: center; width: 80% !important">
+        <table>
+            <thead>
+                <tr>
+                <th>
+                    Project Name
+                </th>      
+                <th>
+                    Project Number    
+                </th>
+                <th>
+                    Roster
+                </th>
+                <th>
+                    Location
+                </th>
+                    <th>
+                        Duration (weeks)
+                    </th>
+                    <th>
+                        Operations
+                    </th>
+              </tr>
+            </thead>
+            @foreach (var project in Model.Projects)
+            {
+                <tr id="project_@project.ProjectId">
+                    <td>
+                        @project.ProjectName
+                    </td>
+                    <td>
+                        @project.ProjectNumber
+                    </td>
+                    <td>
+                        @project.RosterWork (@project.RosterBreak)
+                    </td>
+                    <td>
+                        @project.Location
+                    </td>
+                    <td>
+                        @project.Duration
+                    </td>
+                    <td>
+                        <a href="#" id="viewAspects_@project.ProjectId" data-projectid="@project.ProjectId" class="myButton">View Aspects</a>
+                        <a href="#" id="editAspects_@project.ProjectId" data-projectid="@project.ProjectId" class="myButton">Edit Aspects</a>
+                        <a href="#" class="removeProject deleteButton" data-projectid="@project.ProjectId">Remove Project</a>
+                        <a href="#" id="editProject_@project.ProjectId" data-projectid="@project.ProjectId" class="myButton edit-project" data-url-edit-project="@Url.Action("EditProject", "Login", new { projectId = project.ProjectId })" data-url-update-project="@Url.Action("UpdateProject", "Login")">Edit Project</a>
+                    </td>
+                </tr>
+ }
+        </table>
+    </div>
+</div>
+    <div id="newUser">
+        <div>
+            <span>Username</span>   
+            <input class="textbox" id="username" type="text"/>
+        </div>
+        <div>
+            <span>Password</span>    
+            <input class="textbox" id="password" type="password"/>
+        </div>
+         <div>
+             <span>Role</span>
+             <p></p>    
+             <select id="userrole" style="width:162px">
+                 <option value="administrator">Administrator</option>
+                 <option value="user">User</option>
+                 <option value="analyst">Analyst</option>
+             </select>
+        </div>
+        <a href="#" id="addNewUser" style="color:white !important; margin-top: 5px;" class="myButton">Add a new User</a>
+    </div>
+    
+    <div id="newProject">
+        <table>
+            <tr>
+                <td style="width:250px">Project Name</td>
+                <td><input class="textbox" id="projectName" type="text"/></td>
+            </tr>
+            <tr>
+                <td style="width:140px">Project Number</td>
+                <td><input class="textbox" id="projectNumber" type="text"/></td>
+            </tr>
+            <tr>
+                <td style="width:140px">Start date</td>
+                <td><input class="textbox" id="projectStartDate" type="text"/></td>
+            </tr>
+            <tr>
+                <td style="width:140px">Location</td>
+                <td><input class="textbox" id="location" type="text"/></td>
+            </tr>
+            <tr>
+                <td style="width:270px">Roster (Work/Break)</td>
+                <td>
+                    <input class="textbox" style="width:50px;" id="rosterWork" type="text"/>
+                    <input class="textbox" style="width:50px; "id="rosterBreak" type="text"/>
+                </td>
+                
+            </tr>
+            <tr>
+                <td style="width:140px">Duration (Weeks)</td>
+                <td><input class="textbox" id="Duration" type="text"/></td>
+            </tr>
+        </table>
+
+        <a href="#" id="addNewProject" style="color:white !important; margin-top: 5px;" class="myButton">Add Project</a>
+    </div>
+    
+    <div id="addUserToProject">
+    </div>
+    
+    <div id="editAspects">
+        
+    </div>
+    
+    <div id="viewAspects"></div>
+    
+    <div id="editProjectDialog">
+        
+    </div>
+</body>
+<script>
+    
+    var addNewUser = '@Url.Action("AddNewUser", "User")';
+    var addNewProject = '@Url.Action("AddNewProject", "User")';
+    $("#projects").hide();
+    $("#users").hide();
+    
+    $("a[id^=editAspects]").click(function() {
+        var projectId = $(this).attr("data-projectid");
+        var url = '@Url.Action("EditAspects", "Login")';
+        $.ajax({            
+            url: url
+            , data: { projectId: projectId }
+            , cache: false
+            , success: function (data) {
+                $("#editAspects").html(data);
+            }
+        });
+    });
+    
+
+    $(".logout").click(function () {
+        var url = '@Url.Action("Index", "Login")';
+            window.location = url;
+        });
+    
+    
+    $(".addToProject").click(function () {
+        var userId = $(this).attr("data-userId");
+        var url = '@Url.Action("ExistingUserProjects", "Login")';
+        $.ajax({
+            url: url
+            , data: { userId: userId }
+            , cache: false
+            , success: function (data) {
+                $("#addUserToProject").html(data);
+                $("#addUserToProject").dialog("open");
+            }
+        });
+    });
+    
+
+    $(".edit-project").click(function () {
+        var url = $(this).data("url-edit-project");
+        var updateUrl = $(this).data("url-update-project");
+        var $dialog = $('#editProjectDialog')
+        $.ajax({
+            url: url,
+            type: "GET",
+            cache: false,
+            ifModified: false,
+            success: function (result) {
+                $dialog.html(result);
+                $dialog.find("#StartDate").datepicker({ dateFormat: 'dd/mm/yy' });
+                $dialog.dialog({
+                    modal: true,
+                    title: 'Update Project Details',
+                    buttons: {
+                        Save: function () {
+                            
+                            var projectId = $dialog.find("#ProjectId").val();
+                            var projectName = $dialog.find("#ProjectName").val();
+                            var projectNumber = $dialog.find("#ProjectNumber").val();
+                            var rosterWork = $dialog.find("#RosterWork").val();
+                            var rosterBreak = $dialog.find("#RosterBreak").val();
+                            var duration = $dialog.find("#Duration").val();
+                            var location = $dialog.find("#Location").val();
+                            var projectStartDate = $dialog.find("#StartDate").val();
+
+                            if (projectName == undefined || projectName == "") {
+                                toastr.error("Project must have a name!");
+                            } else {
+                                var myform = $dialog.find('form');
+                                $.ajax({
+                                    url: updateUrl,
+                                    type: "POST",
+                                    data: myform.serialize(),
+                                    datatype: "json",
+                                    success: function (result) {
+                                        $dialog.html(result);
+
+                                        //if ($dialog.find('.success-message').length > 0) {
+
+                                            projectId = $dialog.find("#ProjectId").val();
+                                            projectName = $dialog.find("#ProjectName").val();
+                                            projectNumber = $dialog.find("#ProjectNumber").val();
+                                            rosterWork = $dialog.find("#RosterWork").val();
+                                            rosterBreak = $dialog.find("#RosterBreak").val();
+                                            duration = $dialog.find("#Duration").val();
+                                            location = $dialog.find("#Location").val();
+                                            projectStartDate = $dialog.find("#StartDate").val();
+
+                                            $('tr#project_' + projectId + ' td').eq(0).text(projectName);
+                                            $('tr#project_'+projectId+' td').eq(1).text(projectNumber);
+                                            $('tr#project_' + projectId + ' td').eq(2).text(rosterWork.trim() + ' (' + rosterBreak.trim() + ')');
+                                            $('tr#project_'+projectId+' td').eq(3).text(location);
+                                            $('tr#project_' + projectId + ' td').eq(4).text(duration);
+                                        //}
+                                    }
+                                });
+                            }
+                        },
+
+                        Close: function () {
+                            $(this).dialog('close');
+                        }
+                    }
+                });
+            }
+        });
+    });
+
+    $(".removeUser").click(function () {
+        var userId = $(this).attr("data-userId");
+        var url = '@Url.Action("RemoveUser", "Login")';
+        $.ajax({
+            url: url
+            , data: { userId: userId }
+            , cache: false
+            , success: function (data) {
+                toastr.success('This user has been removed!');
+                $("#user_" + userId).fadeOut();
+            }
+        });
+    });
+    
+    $(".removeProject").click(function () {
+        var projectId = $(this).attr("data-projectid");
+        var url = '@Url.Action("RemoveProject", "Login")';
+        $.ajax({
+            url: url
+            , data: { projectId: projectId }
+            , cache: false
+            , success: function (data) {
+                toastr.success('This project has been removed!');
+                $("#project_" + projectId).fadeOut();
+            }
+        });
+     });
+    
+    $("a[id^=viewAspects]").click(function () {
+        var projectId = $(this).attr("data-projectid");
+        var url = '@Url.Action("ViewAspects", "Login")';
+        $.ajax({
+            url: url
+            , data: { projectId: projectId }
+            , cache: false
+            , success: function (data) {
+                $("#viewAspects").html(data);
+            }
+        });
+     });
+
+
+
+    $("#showProjects").click(function () {
+        if ($("#projects").is(":visible")) {
+            $("#projects").slideUp();
+        } else {
+            $("#projects").slideDown();
+        }
+        
+    });
+
+    $("#showUsers").click(function () {
+        
+        if ($("#users").is(":visible")) {
+            $("#users").slideUp();
+        } else {
+            $("#users").slideDown();
+        }
+    });
+    $("#addUser").click(function() {
+        $("#newUser").dialog("open");
+    });
+    
+    $("#addProject").click(function () {
+        $("#newProject").dialog("open");
+    });
+
+    $(document).ready(function() {
+        $("#newUser").dialog({ autoOpen: false, title: "Add New User", width: '220px', position: 'top' });
+        $("#newProject").dialog({ autoOpen: false, title: "Add New Project", width: '380px', position: 'top' });
+        $("#projectStartDate").datepicker({ dateFormat: 'dd/mm/yy' });
+        $("#addUserToProject").dialog({ autoOpen: false, title: 'Grant Project Access', width: '650px', position: 'top' });
+        $.ajaxSetup({
+            cache: false
+        });
+    });
+
+    $("#addNewProject").click(function() {
+        var projectName = $("#projectName").val();
+        var projectNumber = $("#projectNumber").val();
+        var rosterWork = $("#rosterWork").val();
+        var rosterBreak = $("#rosterBreak").val();
+        var duration = $("#Duration").val();
+        var location = $("#location").val();
+        var projectStartDate = $("#projectStartDate").val();
+        
+        if (projectName == undefined || projectName == "") {
+            toastr.error("Project must have a name!");
+        } else {
+            $.ajax({
+                url: addNewProject,
+                type: "POST",
+                data: { projectName: projectName, projectNumber: projectNumber, projectStartDate: projectStartDate, rosterWork: rosterWork, rosterBreak: rosterBreak, duration: duration, location: location },
+                success: function () {
+                    toastr.success('A New project hass been created');
+                    $("#newProject").dialog("close");
+                }
+            });
+        }
+    });
+
+    $("#addNewUser").click(function () {
+        var user = $("#username").val();
+        var password = $("#password").val();
+        var role = $("#userrole option:selected").val();
+        
+        if (user == "" || password == "") {
+            toastr.error('Username and Password fields must be completed!');
+        } else {
+            $.ajax({
+                url: addNewUser,
+                type: "POST",
+                data: { username: user, password: password, role: role },
+                success: function () {
+
+                    toastr.options = {
+                        "closeButton": false,
+                        "debug": false,
+                        "positionClass": "toast-top-right",
+                        "onclick": null,
+                        "showDuration": "300",
+                        "hideDuration": "1000",
+                        "timeOut": "5000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    };
+
+                    toastr.success('User role created');
+                    $("#newUser").dialog("close");
+                }
+            });
+        }
+    });
+    
+</script>

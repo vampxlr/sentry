@@ -1,0 +1,33 @@
+﻿<section class="mainbar" data-ng-controller="ViewAspect as vm">
+    <section class="matter">
+        <div class="row">
+
+
+            <div class="col-md-12">
+                <div class="widget wblue">
+                    <div data-cc-widget-header title="{{vm.title}}"></div>
+                    <div class="widget-content ">
+
+                        <div style="margin: 20px; background-color: rgb(71, 86, 129); padding: 20px; color: white; " ng-repeat="aspects in vm.ProjectAspects">
+                            <em><strong> Aspect Name:</strong></em>   {{aspects.AspectName}} 
+                            <div ng-repeat="AspectItem in aspects.AspectItems" style="padding-left:10px;">
+                                <em> Aspect Item Name:</em>  {{AspectItem.AspectItem}}
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="widget-foot">
+
+                        <div class=" row">
+                          
+                        </div>
+
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <button ng-click="vm.go('/Projects')" class="btn btn-info"><i class="fa fa-long-arrow-left"></i>Back To Projects</button>
+            </div> <!--end of col md 6-->
+            
+        </div>
+    </section>
+</section>

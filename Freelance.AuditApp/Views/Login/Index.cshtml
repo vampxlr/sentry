@@ -1,0 +1,62 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Please login to the Audit Application</title>
+        <link href="~/Content/audit.css" rel="stylesheet" />
+        <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <section id="content">
+                <form onsubmit="return false;">
+                    <h1>EnviroManager</h1>
+                    <div>
+                        <input type="text" placeholder="Username" required id="username" />
+                    </div>
+                    <div>
+                        <input type="password" placeholder="Password" required id="password" />
+                    </div>
+                    <div>
+                        <input id="login" class="button-margin" type="submit" value="Log in" />
+                    </div>
+                </form>
+            </section>
+        </div>
+   
+    </body>
+</html>
+
+<script>
+    var loginUrl = '@Url.Action("Authenticate")';
+    var auditApp = '@Url.Action("Authorized")';
+    var denied = '@Url.Action("Unauthorized")';
+    function bindLogin() {
+        $('#login').click(function () {
+            var username = $("#username").val();
+            var password = $("#password").val();
+            
+            if (username != "" && password != "") {
+                $.ajax({
+                    url: loginUrl,
+                    type: "POST",
+                    data: { username: username, password: password },
+                    success: function (data) {
+                        if (data.authorized) {
+                            window.location = auditApp;
+                        } else {
+                            window.location = denied;
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        bindLogin();
+    });
+</script>

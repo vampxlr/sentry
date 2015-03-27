@@ -1,0 +1,140 @@
+﻿<section class="mainbar" data-ng-controller="InspectionReport as vm">
+    <section class="matter">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="widget wblue">
+                    <div data-cc-widget-header title="Query Options" allow-collapse="true"></div>
+                    <div class="widget-content ">
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div style="padding-right:0px"  class="col-md-1">
+                                    <p style="width:100%"><em>Start-Date</em></p>
+                                </div>
+                                <div class="col-md-3">
+                                    <input style="width:100%" ng-model="vm.startDate" placeholder="Starting date" class="form-control" type="text" value="" ui-date>
+                                </div>
+                                <div class="col-md-1">
+                                    <p><em>End-Date</em></p>
+                                </div>
+                                <div class="col-md-3">
+                                    <input style="width:100%" ng-model="vm.endDate" placeholder="Ending date" class="form-control" type="text" value="" ui-date>
+                                </div>
+                                <div style="padding-right:0px" ; class="col-md-1">
+                                    <p style="width:100%"><em>Query</em></p>
+                                </div>
+                                <div class="col-md-3">
+                                    <button style="width:100%" ng-click="vm.QueryResults()" class="btn btn-success">List Inspections</button>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row" style="padding-top:20px">
+                            <div class="col-md-12">
+                                <div style="padding-right:0px" ; class="col-md-1">
+                                    <p style="width:100%"><em>Search</em></p>
+                                </div>
+                                <div class="col-md-11">
+                                    <input style="width:100%" ng-model="vm.filter" placeholder="Search term" class="form-control" type="text" value="" >
+                                </div> 
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="widget-foot">
+
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+
+            </div> <!--end of col md 6-->
+
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="widget wblue">
+                    <div data-cc-widget-header title="Query Result" allow-collapse="true"></div>
+                    <div class="widget-content ">
+
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tr>
+                                    <th><a href="" ng-click="predicate = 'ProjectName'; reverse=false"><em>Project</em></a><a href="" ng-click="predicate = '-ProjectName'; reverse=false">[^]</a></th>
+                                    <th><a href="" ng-click="predicate = 'AspectItemName'; reverse=false"><em>Aspect Item</em></a><a href="" ng-click="predicate = '-AspectItemName'; reverse=false">[^]</a></th>
+                                    <th><a href="" ng-click="predicate = 'ObservationalComment'; reverse=false"><em>Comment</em></a><a href="" ng-click="predicate = '-ObservationalComment'; reverse=false">[^]</a></th>
+                                    <th><a href="" ng-click="predicate = 'Satisfactory'; reverse=false"><em>Satisfactory</em></a><a href="" ng-click="predicate = '-Satisfactory'; reverse=false">[^]</a></th>
+                                    <th><a href="" ng-click="predicate = 'ConductedBy'; reverse=false"><em>ConductedBy</em></a><a href="" ng-click="predicate = '-ConductedBy'; reverse=false">[^]</a></th>
+                                    <th><a href="" ng-click="predicate = 'Auditees'; reverse=false"><em>Auditees</em></a><a href="" ng-click="predicate = '-Auditees'; reverse=false">[^]</a></th>
+                                    <th><a href="" ng-click="predicate = 'WeatherObservations'; reverse=false"><em>Weather Observations</em></a><a href="" ng-click="predicate = '-WeatherObservations'; reverse=false">[^]</a></th>
+                                    <th><a href="" ng-click="predicate = 'DateRecorded'; reverse=false"><em>Date Recorded</em></a><a href="" ng-click="predicate = '-DateRecorded'; reverse=false">[^]</a></th>
+                                </tr>
+
+                                <tr ng-repeat="result in vm.Results| orderBy:predicate:reverse | filter:vm.filter">
+                                    <td><em>{{result.ProjectName}}</em></td>
+                                    <td><em>{{result.AspectItemName}}</em></td>
+                                    <td><em>{{result.ObservationalComment}}</em></td>
+                                    <td><em>{{result.Satisfactory}}</em></td>
+                                    <td><em>{{result.ConductedBy}}</em></td>
+                                    <td><em>{{result.Auditees}}</em></td>
+                                    <td><em>{{result.WeatherObservations}}</em></td>
+                                    <td><em>{{result.DateRecorded}}</em></td>
+
+                                </tr>
+
+
+                            </table>
+                        </div>
+
+                    </div>
+                    <div class="widget-foot">
+
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+
+            </div> <!--end of col md 6-->
+
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="widget wblue">
+                    <div data-cc-widget-header title="Date Select" allow-collapse="true"></div>
+                    <div class="widget-content ">
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div style="padding-right:0px" ; class="col-md-1">
+                                    <p style="width:100%"><em>Start-Date</em></p>
+                                </div>
+                                <div class="col-md-3">
+                                    <input style="width:100%" ng-model="vm.startDate" placeholder="Starting date" class="form-control" type="text" value="" ui-date>
+                                </div>
+                                <div class="col-md-1">
+                                    <p><em>End-Date</em></p>
+                                </div>
+                                <div class="col-md-3">
+                                    <input style="width:100%" ng-model="vm.endDate" placeholder="Ending date" class="form-control" type="text" value="" ui-date>
+                                </div>
+                                <div style="padding-right:0px" ; class="col-md-1">
+                                    <p style="width:100%"><em>Query</em></p>
+                                </div>
+                                <div class="col-md-3">
+                                    <button style="width:100%" ng-click="vm.DownloadExcel()" class="btn btn-success">Export To Excel</button>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                    <div class="widget-foot">
+
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+
+            </div> <!--end of col md 6-->
+
+        </div>
+    </section>
+</section>

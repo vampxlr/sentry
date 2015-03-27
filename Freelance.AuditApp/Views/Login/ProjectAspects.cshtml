@@ -1,0 +1,222 @@
+﻿@model Freelance.AuditApp.Models.PartialProjectModel 
+@{
+    var loggedIn = Session["Username"];
+}
+<head>
+    <link href="~/Content/tables.css" rel="stylesheet" />
+    <link href="~/Content/audit.css" rel="stylesheet" />
+    <link href="~/Content/tables.css" rel="stylesheet" />
+    <link href="~/Content/button.css" rel="stylesheet" />
+    <link href="~/Content/jquery-ui-1.10.4.custom.css" rel="stylesheet" />
+</head>
+<div class="datagrid" style="margin-top: 15px;">
+    <div id="accordion">
+    @foreach (var project in Model.Projects)
+    {
+        <table style="width:100%">
+            <tr>
+                <th>
+                    Question
+                </th>
+                <th>
+                    Satisfactory (Yes/No/NA)
+                </th>
+                <th>
+                    Observational Comments
+                </th>
+                <th>
+                    Actions
+                </th>
+            </tr>
+            @foreach (var sect in project.ProjectAspects)
+            {
+                <tr>
+                    <td colspan="3" style="background-color: lightgray">
+                        <b>@sect.Aspect</b>
+                    </td>
+                    <td>
+                        <a class="toggleVisible" data-id="@sect.ProjectAspectsID" />
+                    </td>
+                </tr>
+                foreach (var question in sect.AspectItems)
+                {
+                    <tr id="aspect_(@question.AspectItemsID)" class="@sect.ProjectAspectsID">
+                        <td>
+                            @question.AspectItem1
+                        </td>
+                        <td>
+                            <select class="aspect_@(question.AspectItemsID)_Satisfactory clear" style="width:200px; text-align: center; margin-left:20%;">
+                                <option>Yes</option>
+                                <option>No</option>
+                                <option>NA</option>
+                            </select>
+                            <input id="aspect_@(question.AspectItemsID)_Satisfactory" class="textbox-large" type="hidden" value="Yes" />
+                        </td>
+                        <td>
+                            <textarea  cols="50" id="aspect_@(question.AspectItemsID)_ObservationalComments" class="textbox-large clear" style="width:100% !important; height: 35px; margin-top:5px;" />
+                        </td>
+                        <td>
+                            <a href="#"  class="myButton addAction" style="color:white; margin-left: 20%">Add action!</a>
+                        </td>
+                    </tr>
+                }
+            }
+
+        </table>
+    
+    }
+        </div>
+</div>
+
+<div id="newActions">
+    <table>
+        <tr>
+            <td style="vertical-align: middle; width: 150px;">
+                <span style="vertical-align: middle">Action Description</span>
+            </td>
+            <td>
+                <textarea id="actionDescription" class="textbox-large" cols="200" style="height:100px; width: 100%;"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Person Responsible
+            </td>
+            <td>
+                <input type="text" class="textbox-large" value="@loggedIn" readonly="readonly" id="personResponsible" />
+            </td>
+        </tr>
+        <tr>
+            <td>Action Priority</td>
+            <td>
+                <select class="textbox-large" id="actionPriority">
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                </select>    
+            </td>
+        </tr>
+        <tr>
+            <td>Action Due Date</td>
+            <td><input id="actionDueDate" class="textbox-large" type="text"/></td>
+        </tr>
+        <tr>
+            <td>
+                Attach a file
+            </td>
+            <td>
+                <input type="file" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a href="#" id="addNewAction" class="myButton" style="color:white">Add action!</a>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div style="margin-top:3px;">
+    <a href="#" id="saveAudit" class="myButton2">Save Audit</a>    
+</div>
+
+<script>
+
+    $(document).ready(function() {
+        $("#newActions").dialog({ autoOpen: false, title: 'Add an action', width: '570px', position: 'top' });
+        $("#actionDueDate").datepicker({ dateFormat: 'dd/mm/yy' });
+    });
+    
+    $(".addAction").click(function() {
+        $("#newActions").dialog('open');
+    });
+
+    $("select[class ^='aspect_']").change(function() {
+        var className = this.className;
+        var id = this.className;
+        var val = $("." + className + " option:selected").val();
+        $("#" + id).val(val);
+    });
+
+    $(".toggleVisible").click(function() {
+        var id = $(this).attr("data-id");
+        
+        $("." + id).each(function() {
+            if ($(this).is(":visible")) {
+                $(this).slideUp();
+            } else
+            {
+                $(this).slideDown();
+            }
+        });
+    });
+
+    $("#addNewAction").click(function() {
+        var url = '@Url.Action("AddNewAction", "User")';
+        var projectId = $("#projectId").val();
+        var description = $("#actionDescription").val();
+        var dueDate = $("#actionDueDate").val();
+        var person = $("#personResponsible").val();
+        var priority = $("#actionPriority option:selected").val();
+
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: { projectId: projectId, description: description, dateTime: dueDate, person: person, priority: priority },
+            success: function() {
+                toastr.success('A new action has been created!');
+                $("#newActions").dialog("close");
+            }
+        });
+
+    });
+
+    $("#saveAudit").click(function() {
+        var date = $("#date").val();
+        if (date == "") {
+            toastr.error("Please ensure all fields have been completed before submitting the audit")
+        } else {
+            var auditModel = {
+                ProjectAspects: []
+            };
+
+            $("tr[id^=aspect]").each(function() {
+                var aspectId = this.id.substring(8, this.id.indexOf(")"));
+                var satisfactory = $("#aspect_" + aspectId + "_Satisfactory").val();
+                var observationalComments = $("#aspect_" + aspectId + "_ObservationalComments").val();
+
+                var projectAspect =
+                {
+                    AspectId: aspectId,
+                    ObservationalComments: observationalComments,
+                    Satisfactory: satisfactory,
+                    WeatherObservations: $("#weather").val(),
+                    Auditee: $("#conductedBy").val(),
+                    ProjectId: $("#projectId").val(),
+                    DateRecorded: $("#date").val()
+                };
+
+                auditModel.ProjectAspects.push(projectAspect);
+
+            });
+
+            var url = '@Url.Action("SaveAudit", "User")';
+
+            $.ajax({
+                url: url,
+                type: "POST",
+                traditional: true,
+                //contentType: "application/json"
+                data: { model: JSON.stringify(auditModel) },
+                success: function() {
+                    toastr.success('Audit successfully saved!');
+                    $(".clear").each(function() {
+                        $(this).val('');
+                    });
+                }
+            });
+
+        }
+    });
+    
+</script>

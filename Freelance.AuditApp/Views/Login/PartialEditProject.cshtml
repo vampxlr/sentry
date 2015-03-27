@@ -1,0 +1,53 @@
+﻿@model Freelance.AuditApp.Models.ProjectModelUpdate
+<div id="editProject">
+    @using (Html.BeginForm("UpdateProject", "Login"))
+    {
+        @Html.ValidationSummary(true)
+        @Html.AntiForgeryToken()
+        if (ViewBag.SuccessMessage != null)
+        { 
+            <p class="success-message">@ViewBag.SuccessMessage</p>
+        }
+        <table>
+            <tr>
+                <td style="width: 250px">Project Name</td>
+                <td>
+                    @Html.HiddenFor(m => m.ProjectId)
+                    @Html.TextBoxFor(m => m.ProjectName, new { @class = "textbox" })
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 140px">Project Number</td>
+                <td>
+                @Html.TextBoxFor(m => m.ProjectNumber, new { @class = "textbox" })
+            </tr>
+            <tr>
+                <td style="width: 140px">Start date</td>
+                <td>
+                    @Html.TextBoxFor(m => m.StartDate,"{0:dd/MM/yyyy}", new { @class = "textbox" })
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 140px">Location</td>
+                <td>
+                    @Html.TextBoxFor(m => m.Location, new { @class = "textbox" })
+
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 270px">Roster (Work/Break)</td>
+                <td>
+                    @Html.TextBoxFor(m => m.RosterWork, new { @class = "textbox", style = "width: 50px;" })
+                    @Html.TextBoxFor(m => m.RosterBreak, new { @class = "textbox", style = "width: 50px;" })
+                </td>
+
+            </tr>
+            <tr>
+                <td style="width: 140px">Duration (Weeks)</td>
+                <td>
+                    @Html.TextBoxFor(m => m.Duration, new { @class = "textbox" })
+                </td>
+            </tr>
+        </table>
+    }
+</div>

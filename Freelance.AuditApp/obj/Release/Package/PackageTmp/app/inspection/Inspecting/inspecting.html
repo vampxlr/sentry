@@ -1,0 +1,172 @@
+﻿<section class="mainbar" data-ng-controller="inspecting as vm">
+    <section class="matter">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="widget wblue">
+
+                    <div data-cc-widget-header title="Project Details"></div>
+                    <div class="widget-content ">
+
+                        <div class="row" style="padding-bottom:15px">
+                            <div class="col-md-3"><em><strong>Project</strong></em></div>
+                            <div class="col-md-3">
+                                <input style="width:100%;" type="text" class="form-control" value="{{vm.Project.ProjectName}}" disabled />
+                            </div>
+                            <div class="col-md-3"><em><strong>Project Number</strong></em></div>
+                            <div class="col-md-3">
+                                <input style="width:100%;" type="text" class="form-control" value="{{vm.Project.ProjectNumber}}" disabled />
+                            </div>
+                        </div>
+
+                        <div class="row" style="padding-bottom:15px">
+                            <div class="col-md-3"><em><strong>Date</strong></em></div>
+                            <div class="col-md-3">
+                                <input style="width:100%;" placeholder="Enter Date" ng-model="vm.AuditDate" type="text" class="form-control" value="" ui-date />
+                            </div>
+                            <div class="col-md-3"><em><strong>Time</strong></em></div>
+                            <div class="col-md-3">
+                                <input style="width:100%;" placeholder="Enter Time" ng-model="vm.AuditTime" type="text" class="form-control" value="" />
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-3"><em><strong>Conducted By</strong></em></div>
+                            <div class="col-md-3">
+                                <input style="width:100%;" type="text" class="form-control" value="{{vm.username}}" disabled />
+                            </div>
+                            <div class="col-md-3"><em><strong>Weather Observation</strong></em></div>
+                            <div class="col-md-3">
+                                <input style="width:100%;" placeholder="Enter Weather Condition" ng-model="vm.AuditWeather" type="text" class="form-control" value="" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="widget-foot">
+
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+
+            </div> <!--end of col md 6-->
+            <div class="col-md-12" ng-repeat="aspect in vm.Aspect">
+                <div class="widget wblue">
+                    <div data-cc-widget-header title="{{aspect.AspectName}}" allow-collapse="true"></div>
+                    <div class="widget-content ">
+
+                        <div class="row" style="padding:10px;">
+                            <div class="col-md-3"><em><strong>Aspect Item Name</strong></em></div>
+                            <div class="col-md-3">
+                                <em><strong>Satisfactory</strong></em>
+                            </div>
+                            <div class="col-md-3"><em><strong>Observation Comment</strong></em></div>
+                            <div class="col-md-3" style="text-align:center">
+                                <em><strong>Action</strong></em>
+                            </div>
+                        </div>
+                        <div class="row" ng-repeat="aspectItem in aspect.AspectItems" style="padding:10px;">
+                            <div class="col-md-3"><p><em>{{aspectItem.AspectItem}}</em></p></div>
+                            <div class="col-md-3">
+                                <select style="width:100%;" ng-model="vm.AspectItemSatisfaction[aspectItem.AspectItemsID]" ng-init="vm.AspectItemSatisfaction[aspectItem.AspectItemsID]='NA'" class="form-control">
+                                    <option>Yes</option>
+                                    <option>No</option>
+                                    <option>NA</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3"><textarea placeholder="Enter observational comments" ng-model="vm.AspectItemObservationalComment[aspectItem.AspectItemsID]" style="width:100%;" class="form-control" rows="1"></textarea></div>
+                            <div class="col-md-3">
+                                <button style="width:100%;" data-toggle="modal" data-target="#actionModal" class="btn btn-primary">Add Action</button>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="widget-foot">
+
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+
+            </div> <!--end of col md 6-->
+            <div class="col-md-12">
+                <button ng-disabled="vm.disable" ng-click="vm.postProjectAspects()" class="btn btn-primary btn-lg">Save Inspection</button>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="actionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="myModalLabel">Add an action</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="col-md-4">
+                                        <em>Action Description</em>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <textarea ng-model="vm.actionDescription" placeholder="Enter action description here..." name cols="" rows="3" class="form-control" style="width:100%;"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="padding-top:20px" class="row">
+                                <div class="col-md-12">
+                                    <div class="col-md-4">
+                                        <em>Person Responsible</em>
+                                    </div>
+                                    <div class="col-md-8">
+                                        
+                                        <select class="form-control" style="width:100%;" ng-model="vm.SelectedUser" ng-options="user.UserName for user in vm.AssignedUsersList">
+                                            <option value="">Select an User</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div style="padding-top:20px" class="row">
+                                <div class="col-md-12">
+                                    <div class="col-md-4">
+                                        <em>Person's Email Address</em>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="text" ng-model="vm.EmailTo" class="form-control" style="width:100%;" placeholder="Enter Email Address" />
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div style="padding-top:20px" class="row">
+                                <div class="col-md-12">
+                                    <div class="col-md-4">
+                                        <em> Action Priority</em>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <select ng-model="vm.priority" ng-init="vm.priority='Low'" class="form-control" style="width:100%">
+                                            <option>High</option>
+                                            <option>Medium</option>
+                                            <option>Low</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="padding-top:20px" class="row">
+                                <div class="col-md-12">
+                                    <div class="col-md-4">
+                                        <em>Action Due Date</em>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="text" ng-model="vm.newActionDate" placeholder="Enter due date here format[dd/mm/yyyy]" class="form-control" style="width:100%;" ui-date />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button ng-click="vm.AddNewAction()" data-dismiss="modal" type=" button" class="btn btn-primary">Add Action</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
+</section>
+

@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Audit" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="AuditConnection" p1:LazyLoadingEnabled="true">
+    <EntitySet Name="UserProjects" EntityType="Audit.UserProject" />
+    <EntitySet Name="Users" EntityType="Audit.User" />
+    <AssociationSet Name="FK__UserProje__UserI__145C0A3F" Association="Audit.FK__UserProje__UserI__145C0A3F">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="UserProjects" EntitySet="UserProjects" />
+    </AssociationSet>
+    <EntitySet Name="AspectItems" EntityType="Audit.AspectItem" />
+    <EntitySet Name="ProjectAspects" EntityType="Audit.ProjectAspect" />
+    <AssociationSet Name="FK__AspectIte__Proje__22AA2996" Association="Audit.FK__AspectIte__Proje__22AA2996">
+      <End Role="ProjectAspect" EntitySet="ProjectAspects" />
+      <End Role="AspectItem" EntitySet="AspectItems" />
+    </AssociationSet>
+    <EntitySet Name="Actions" EntityType="Audit.Action" />
+    <EntitySet Name="Results" EntityType="Audit.Result" />
+    <EntitySet Name="Projects" EntityType="Audit.Project" />
+    <AssociationSet Name="FK__ProjectAs__Proje__1920BF5C" Association="Audit.FK__ProjectAs__Proje__1920BF5C">
+      <End Role="Project" EntitySet="Projects" />
+      <End Role="ProjectAspect" EntitySet="ProjectAspects" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Projects__Create__0EA330E9" Association="Audit.FK__Projects__Create__0EA330E9">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Project" EntitySet="Projects" />
+    </AssociationSet>
+    <AssociationSet Name="FK__UserProje__Proje__1367E606" Association="Audit.FK__UserProje__Proje__1367E606">
+      <End Role="Project" EntitySet="Projects" />
+      <End Role="UserProject" EntitySet="UserProjects" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="UserProject">
+    <Key>
+      <PropertyRef Name="UserProjectId" />
+    </Key>
+    <Property Name="UserProjectId" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+    <Property Name="ProjectId" Type="Int32" />
+    <Property Name="UserId" Type="Int32" />
+    <NavigationProperty Name="User" Relationship="Audit.FK__UserProje__UserI__145C0A3F" FromRole="UserProjects" ToRole="Users" />
+    <NavigationProperty Name="Project" Relationship="Audit.FK__UserProje__Proje__1367E606" FromRole="UserProject" ToRole="Project" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+    <Property Name="Username" Type="String" MaxLength="125" Unicode="false" FixedLength="false" />
+    <Property Name="UserPassword" Type="String" MaxLength="125" Unicode="false" FixedLength="false" />
+    <Property Name="UserRole" Type="String" MaxLength="125" Unicode="false" FixedLength="false" />
+    <NavigationProperty Name="UserProjects" Relationship="Audit.FK__UserProje__UserI__145C0A3F" FromRole="Users" ToRole="UserProjects" />
+    <NavigationProperty Name="Projects" Relationship="Audit.FK__Projects__Create__0EA330E9" FromRole="User" ToRole="Project" />
+  </EntityType>
+  <Association Name="FK__UserProje__UserI__145C0A3F">
+    <End Role="Users" Type="Audit.User" Multiplicity="0..1" />
+    <End Role="UserProjects" Type="Audit.UserProject" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="UserProjects">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="AspectItem">
+    <Key>
+      <PropertyRef Name="AspectItemsID" />
+    </Key>
+    <Property Type="Int32" Name="AspectItemsID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Type="Int32" Name="ProjectAspectID" />
+    <Property Type="String" Name="AspectItem1" MaxLength="2000" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="ProjectAspect" Relationship="Audit.FK__AspectIte__Proje__22AA2996" FromRole="AspectItem" ToRole="ProjectAspect" />
+  </EntityType>
+  <EntityType Name="ProjectAspect">
+    <Key>
+      <PropertyRef Name="ProjectAspectsID" />
+    </Key>
+    <Property Type="Int32" Name="ProjectAspectsID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Type="Int32" Name="ProjectID" />
+    <Property Type="String" Name="Aspect" MaxLength="1400" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="AspectItems" Relationship="Audit.FK__AspectIte__Proje__22AA2996" FromRole="ProjectAspect" ToRole="AspectItem" />
+    <NavigationProperty Name="Project" Relationship="Audit.FK__ProjectAs__Proje__1920BF5C" FromRole="ProjectAspect" ToRole="Project" />
+  </EntityType>
+  <Association Name="FK__AspectIte__Proje__22AA2996">
+    <End Type="Audit.ProjectAspect" Role="ProjectAspect" Multiplicity="0..1" />
+    <End Type="Audit.AspectItem" Role="AspectItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProjectAspect">
+        <PropertyRef Name="ProjectAspectsID" />
+      </Principal>
+      <Dependent Role="AspectItem">
+        <PropertyRef Name="ProjectAspectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Action">
+    <Key>
+      <PropertyRef Name="ActionId" />
+    </Key>
+    <Property Type="Int32" Name="ActionId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Type="Int32" Name="ProjectId" />
+    <Property Type="Int32" Name="CreatedBy" />
+    <Property Type="Boolean" Name="Closed" />
+    <Property Type="String" Name="Priority" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Type="DateTime" Name="DueDate" Precision="3" />
+    <Property Type="DateTime" Name="CreatedDate" Precision="3" />
+    <Property Type="Binary" Name="UploadedFile" MaxLength="50" FixedLength="false" />
+    <Property Type="String" Name="ActionDescription" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="ClosedReason" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Type="DateTime" Name="ClosedDate" Precision="0" />
+    <Property Type="Binary" Name="ClosedFile" MaxLength="50" FixedLength="false" />
+    <Property Type="String" Name="RaisedBy" MaxLength="Max" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Result">
+    <Key>
+      <PropertyRef Name="ResultID" />
+    </Key>
+    <Property Type="Int32" Name="ResultID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Type="Int32" Name="ProjectId" />
+    <Property Type="Int32" Name="AspectItem" />
+    <Property Type="String" Name="ObservationalComment" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="Satisfactory" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="ConductedBy" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="Auditees" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="WeatherObservations" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="AuditGuid" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Type="DateTime" Name="DateRecorded" Precision="3" />
+  </EntityType>
+  <EntityType Name="Project">
+    <Key>
+      <PropertyRef Name="ProjectId" />
+    </Key>
+    <Property Type="Int32" Name="ProjectId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Type="String" Name="ProjectName" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Type="Int32" Name="CreatedBy" />
+    <Property Type="String" Name="RosterWork" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="Location" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="ProjectNumber" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="RosterBreak" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Type="DateTime" Name="StartDate" Precision="3" />
+    <NavigationProperty Name="ProjectAspects" Relationship="Audit.FK__ProjectAs__Proje__1920BF5C" FromRole="Project" ToRole="ProjectAspect" />
+    <NavigationProperty Name="User" Relationship="Audit.FK__Projects__Create__0EA330E9" FromRole="Project" ToRole="User" />
+    <NavigationProperty Name="UserProjects" Relationship="Audit.FK__UserProje__Proje__1367E606" FromRole="Project" ToRole="UserProject" />
+    <Property Type="String" Name="Duration" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <Association Name="FK__ProjectAs__Proje__1920BF5C">
+    <End Type="Audit.Project" Role="Project" Multiplicity="0..1" />
+    <End Type="Audit.ProjectAspect" Role="ProjectAspect" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Project">
+        <PropertyRef Name="ProjectId" />
+      </Principal>
+      <Dependent Role="ProjectAspect">
+        <PropertyRef Name="ProjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Projects__Create__0EA330E9">
+    <End Type="Audit.User" Role="User" Multiplicity="0..1" />
+    <End Type="Audit.Project" Role="Project" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="Project">
+        <PropertyRef Name="CreatedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__UserProje__Proje__1367E606">
+    <End Type="Audit.Project" Role="Project" Multiplicity="0..1" />
+    <End Type="Audit.UserProject" Role="UserProject" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Project">
+        <PropertyRef Name="ProjectId" />
+      </Principal>
+      <Dependent Role="UserProject">
+        <PropertyRef Name="ProjectId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

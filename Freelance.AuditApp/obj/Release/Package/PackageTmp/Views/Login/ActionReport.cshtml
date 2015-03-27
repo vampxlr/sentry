@@ -1,0 +1,174 @@
+﻿@model Freelance.AuditApp.Models.ActionReportModel
+
+@{ var loggedIn = Session["Username"]; }
+
+<head>
+    <title>Audit View</title>
+    <link href="~/Content/audit.css" rel="stylesheet" />
+    <link href="~/Content/tables.css" rel="stylesheet" />
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <link href="~/Content/button.css" rel="stylesheet" />
+    <link href="~/Content/jquery-ui-1.10.4.custom.css" rel="stylesheet" />
+    <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <link href="~/Content/toastr/toastr.css" rel="stylesheet" />
+    <script src="~/Content/toastr/toastr.js"></script>
+    <link href="~/Content/easydropdown.css" rel="stylesheet" />
+</head>
+
+<div id="header">
+    <div>Welcome @loggedIn, you are logged into EnviroManager!</div>
+    <div class="logout">Logout</div>
+</div>
+
+<div class="datagrid">
+    <table>
+        <tr>
+            <th>
+                Inspections completed
+            </th>
+            <th>
+                Actions identified
+            </th>
+            <th>
+                Number of projects containing actions
+            </th>
+            <th>
+                Total closed actions
+            </th>
+            <th>
+                Total projects
+            </th>
+        </tr>    
+        <tr>
+            <td>
+                
+            </td>
+            <td>
+                @Model.TotalActionsIdentified
+            </td>
+            <td>
+                @Model.TotalActionsPerProject
+            </td>
+            <td>
+                @Model.TotalClosedActions
+            </td>
+            <td>
+                @Model.TotalProjects
+            </td>
+        </tr>
+    </table>    
+</div>
+
+<div style="background-color:steelblue; margin-top:10px; color: white; height:50px; margin-top: 10px;">
+    <span class="offset">Start Date:</span>
+    <input class="offset textbox-large" id="startDate" type="text" />
+    <span class="offset">End Date:</span>
+    <input class="offset  textbox-large" id="endDate" type="text" />
+    <a href="#" class="offset myButton" id="filterResults">Query</a>
+</div>
+<div id="showAllActions" class="datagrid" style="margin-top:10px">
+    <table>
+        <tr>
+            <th>
+                Action Description
+            </th>
+            <th>
+                Action Priority
+            </th>
+            <th>
+                Due Date
+            </th>
+            <th>
+                Created Date
+            </th>
+            <th>
+                Raised By
+            </th>
+            <th>
+                Closed
+            </th>
+        </tr>
+        @foreach (var action in Model.Actions)
+        {
+            <tr class="@action.ActionId">
+                <td>
+                    @action.ActionDescription
+                </td>
+                <td>
+                    @action.Priority
+                </td>
+                <td>
+                    @action.DueDate
+                </td>
+                <td>
+                    @action.CreatedDate
+                </td>
+                <td>
+                    @action.RaisedBy
+                </td>
+                <td>
+                    @{
+                        if (action.Closed.HasValue)
+                        {
+                            if (action.Closed.Value)
+                            {
+                                <span>Closed</span>
+                            }
+                            else
+                            {
+                                <span>Open</span>
+                            }
+
+                        }
+                        else
+                        {
+                            <span>Open</span>
+                        }
+                    }
+                  
+                </td>
+            </tr>
+        }
+    </table>    
+</div>
+
+<script>
+    $("#startDate").datepicker({ dateFormat: 'dd/mm/yy' });
+    $("#endDate").datepicker({ dateFormat: 'dd/mm/yy' });
+
+    $("#filterResults").click(function() {
+        var url = '@Url.Action("QueryActions", "Login")';
+        var startDate = $("#startDate").val();
+        var endDate = $("#endDate").val();
+        
+        if (startDate == "" || endDate == "") {
+            toastr.error("Start and End dates must be selected");
+        } else {
+            $.ajax({
+                 url: url
+                , type: "POST"
+                , cache: false
+                , data: { startDate: startDate, endDate: endDate }
+                , success: function (data) {
+                    $("#showAllActions").hide();
+                    $("#showAllActions").html(data);
+                    $("#showAllActions").fadeIn('slow');
+                }
+          });
+        }
+
+    });
+
+    $(".logout").click(function() {
+        var url = '@Url.Action("Index", "Login")';
+        window.location = url;
+    });
+</script>
+
+<style>
+    .offset {
+        position: relative;
+        margin-top: 6px;
+        margin-left: 2px;
+    }
+</style>

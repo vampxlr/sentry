@@ -1,0 +1,115 @@
+﻿@using Freelance.AuditApp.Controllers
+@model Freelance.AuditApp.Models.ActionModel
+<div class="datagrid" style="margin-top:10px">
+    <table>
+        <tr>
+            <th>
+                Action Description
+            </th>
+            <th>
+                Action Priority
+            </th>
+            <th>
+                Due Date
+            </th>
+            <th>
+                Created Date
+            </th>
+            <th>
+                Created By
+            </th>
+            <th>
+                Close Action
+            </th>
+        </tr>
+        @foreach (var action in Model.Actions)
+        {
+            <tr class="@action.ActionId">
+                <td>
+                    @action.ActionDescription
+                </td>
+                <td>
+                    @action.Priority
+                </td>
+                <td>
+                    @action.DueDate
+                </td>
+                <td>
+                    @action.CreatedDate
+                </td>
+                <td>
+                    @action.RaisedBy
+                </td>
+                <td>
+                    <a href="#" id="@action.ActionId" class="myButton closeAction closeUserAction" style="color:white; text-align: center">Close action</a>
+                </td>
+            </tr>
+        }
+    </table>    
+</div>
+
+<div id="closeActionDialog">
+    <table>
+        <tr>
+            <td>
+                Date completed
+            </td>
+            <td>
+                <input id="DateCompleted" type="text" />
+            </td>
+        </tr>
+        <tr>
+            <td style="vertical-align: middle">
+                Comments
+            </td>
+            <td>
+                <textarea id="closeDescription" cols="50" style="width:100% !important; height: 100px;" class="textbox-large"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Attach a file
+            </td>
+            <td>
+                <input type="file" />
+            </td>
+        </tr>
+        <tr>
+            <td style="width:160px">
+                <a href="#" id="closeThisAction" class="myButton addAction" style="color:white">Close action</a>
+            </td>
+        </tr>
+
+    </table>
+</div>
+
+<input type="hidden" id="deleteActionId" />
+
+<script>
+    $(document).ready(function() {
+        $("#closeActionDialog").dialog({ autoOpen: false, title: 'Close this action', width: 500, position: 'top' });
+        $("#DateCompleted").datepicker({ dateFormat: 'dd/mm/yy' });
+    });
+
+    $(".closeUserAction").click(function () {
+        var actionId = this.id;
+        $("#deleteActionId").val(actionId);
+        $("#closeActionDialog").dialog("open");
+    });
+
+    $("#closeThisAction").click(function() {
+        var actionid = $("#deleteActionId").val();
+        var url = '@Url.Action("CloseUserAction", "Login")';
+        $.ajax({
+            url: url,
+            data: { actionId: actionid, description: $("#closeDescription").val(), dateClosed: $("#DateCompleted").val() },
+            success: function() {
+                toastr.success("Action successfully closed");
+                $("#closeActionDialog").dialog("close");
+                $("." + actionid).fadeOut();
+            }
+        });
+        
+
+    });
+</script>

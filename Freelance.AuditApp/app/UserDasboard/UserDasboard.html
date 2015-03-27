@@ -1,0 +1,99 @@
+﻿<section id="dashboard-view" class="mainbar" data-ng-controller="UserDasboard as vm">
+    <section class="matter">
+        <div class="container">
+            <div class="row">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="widget wblue">
+                            <div data-cc-widget-header title="Assigned To Projects" allow-collapse="true"></div>
+                            <div class="widget-content ">
+                                <div class="col-md-12" style="padding-bottom:15px">
+
+
+                                    <input style="width:100%" ng-model="vm.filterProjects" placeholder="Search term" class="form-control" type="text" value="">
+
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <tr>
+                                            <th><a href="" ng-click="predicate = 'ProjectName'; reverse=false"><em>Project</em></a><a href="" ng-click="predicate = '-ProjectName'; reverse=false">[^]</a></th>
+                                            <th><a href="" ng-click="predicate = 'ProjectNumber'; reverse=false"><em>ProjectNumber</em></a><a href="" ng-click="predicate = '-ProjectNumber'; reverse=false">[^]</a></th>
+                                            <th><a href="" ng-click="predicate = 'Location'; reverse=false"><em>Location</em></a><a href="" ng-click="predicate = '-Location'; reverse=false">[^]</a></th>
+
+                                           
+                                        </tr>
+
+                                        <tr ng-repeat="project in vm.assignedprojects | filter:vm.filterProjects| orderBy:predicate:reverse">
+                                            <td><em>{{project.ProjectName}}</em></td>
+                                            <td><em>{{project.ProjectNumber}}</em></td>
+                                            <td><em>{{project.Location}}</em></td>
+
+                                        </tr>
+
+
+                                    </table>
+                                </div>
+
+                            </div>
+                            <div class="widget-foot">
+
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+
+                    </div> <!--end of col md 6-->
+
+                </div>    
+            </div>
+            <div class="row">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="widget wblue">
+                            <div data-cc-widget-header title="List Of Completed Inspections" allow-collapse="true"></div>
+                            <div class="widget-content ">
+                                <div class="col-md-12" style="padding-bottom:15px">
+                                
+                                   
+                                        <input style="width:100%" ng-model="vm.filterInspection" placeholder="Search term" class="form-control" type="text" value="">
+                                    
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <tr>
+                                            <th><a href="" ng-click="predicate = 'ProjectName'; reverse=false"><em>Project</em></a><a href="" ng-click="predicate = '-ProjectName'; reverse=false">[^]</a></th>
+
+                                            <th><a href="" ng-click="predicate = 'Satisfactory'; reverse=false"><em>Satisfactory</em></a><a href="" ng-click="predicate = '-Satisfactory'; reverse=false">[^]</a></th>
+                                            <th><a href="" ng-click="predicate = 'ObservationalComment'; reverse=false"><em>Observational Comment</em></a><a href="" ng-click="predicate = '-ObservationalComment'; reverse=false">[^]</a></th>
+                                            <th><a href="" ng-click="predicate = 'WeatherObservations'; reverse=false"><em>Weather Observations</em></a><a href="" ng-click="predicate = '-WeatherObservations'; reverse=false">[^]</a></th>
+                                          
+                                            <th><a href="" ng-click="predicate = 'DateRecorded'; reverse=false"><em>DateRecorded</em></a><a href="" ng-click="predicate = '-DateRecorded'; reverse=false">[^]</a></th>
+
+                                        </tr>
+                                      
+                                        <tr ng-repeat="inspections in vm.ResultsForUser | filter:vm.filterInspection | orderBy:predicate:reverse">
+                                            <td><em>{{inspections.ProjectName}}</em></td>
+                                            <td><em>{{inspections.Satisfactory}}</em></td>
+                                            <td><em>{{inspections.ObservationalComment}}</em></td>
+                                            <td><em>{{inspections.WeatherObservations}}</em></td>
+
+                                            <td><em>{{inspections.DateRecorded}}</em></td>
+                                        </tr>
+
+
+                                    </table>
+                                </div>
+
+                            </div>
+                            <div class="widget-foot">
+                                
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+
+                    </div> <!--end of col md 6-->
+
+                </div>
+            </div>
+        </div>
+    </section>
+</section>
